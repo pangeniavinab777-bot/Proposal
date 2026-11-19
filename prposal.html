@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Question From My Heart</title>
+    <!-- Tailwind CSS for layout and utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti for the celebration explosion -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts: Great Vibes for romantic script, Playfair Display for headings, Plus Jakarta Sans for clean body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Typography & Color Variables */
+        :root {
+            --bg-cream: #FFF8F6;
+            --blush-pink: #FCE7EC;
+            --soft-rose: #F43F5E;
+            --deep-rose: #BE123C;
+            --warm-gold: #D97706;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top left, #FFF0F3 0%, #FFF8F6 45%, #FCE7EC 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-serif-elegant {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism Card Styling */
+        .romantic-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(190, 18, 60, 0.12), 
+                        0 0 0 1px rgba(244, 63, 94, 0.08);
+        }
+
+        /* Floating Background Hearts Animation */
+        .floating-heart {
+            position: fixed;
+            bottom: -10vh;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.65;
+            }
+            85% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-115vh) scale(1.2) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        /* Gentle Pulse for the Main Heart Icon */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+        }
+
+        .animate-heartbeat {
+            animation: heartbeat 2.2s infinite ease-in-out;
+        }
+
+        /* Smooth Fade In */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .animate-reveal {
+            animation: fadeInScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Yes Button Glow & Shimmer */
+        .btn-yes {
+            background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);
+            box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.45);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(225, 29, 72, 0.6);
+        }
+
+        .btn-yes:active {
+            transform: scale(0.98);
+        }
+
+        /* No Button Smooth Transition when Dodging */
+        .btn-no {
+            transition: left 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        top 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        transform 0.2s ease;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 sm:p-6 relative text-rose-950">
+
+    <!-- Container for Dynamic Floating Hearts -->
+    <div id="hearts-bg" aria-hidden="true"></div>
+
+    <!-- Subtle Customize Trigger Button (Top Right) -->
+    <button id="open-customize-btn" 
+            title="Customize Names & Message"
+            class="fixed top-4 right-4 z-30 bg-white/75 hover:bg-white text-rose-700 px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium shadow-sm border border-rose-200/80 backdrop-blur-md flex items-center gap-1.5 transition-all hover:shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+        <span>Customize</span>
+    </button>
+
+    <!-- Main Proposal Card -->
+    <main id="proposal-container" class="relative z-10 w-full max-w-xl romantic-card rounded-3xl p-7 sm:p-11 text-center animate-reveal">
+        
+        <!-- VIEW 1: THE PROPOSAL QUESTION -->
+        <div id="question-view">
+            <!-- Decorative Heart Emblem -->
+            <div class="mx-auto mb-5 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-rose-100/80 flex items-center justify-center shadow-inner border border-rose-200/60">
+                <svg class="w-9 h-9 sm:w-11 sm:h-11 text-rose-500 animate-heartbeat" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <!-- Recipient Greeting -->
+            <p class="font-script text-3xl sm:text-4xl text-rose-600 mb-2">
+                My Dearest <span id="display-her-name">Sophia</span>,
+            </p>
+
+            <!-- Decorative Divider -->
+            <div class="flex items-center justify-center gap-3 my-4">
+                <span class="h-px w-12 bg-gradient-to-r from-transparent to-rose-300"></span>
+                <span class="text-rose-400 text-xs">✦</span>
+                <span class="h-px w-12 bg-gradient-to-l from-transparent to-rose-300"></span>
+            </div>
+
+            <!-- Heartfelt Love Letter Message -->
+            <p id="display-message" class="text-rose-900/85 text-base sm:text-lg leading-relaxed mb-7 font-normal px-1 sm:px-4">
+                From the moment you walked into my life, every ordinary day turned into my favorite memory. You are my best friend, my safe place, and my greatest adventure. I want to spend all my tomorrows making you smile.
+            </p>
+
+            <!-- The Big Question -->
+            <h1 id="display-question" class="font-serif-elegant text-2xl sm:text-4xl font-bold text-rose-950 mb-8 tracking-tight">
+                Will you marry me?
+            </h1>
+
+            <!-- Interactive Buttons Area -->
+            <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 min-h-[64px]">
+                <!-- YES Button -->
+                <button id="yes-btn" 
+                        class="btn-yes text-white font-semibold text-lg sm:text-xl px-9 py-3.5 rounded-full cursor-pointer flex items-center gap-2 z-20">
+                    <span>Yes, I will!</span>
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>
+
+                <!-- Playful Dodging NO Button -->
+                <button id="no-btn" 
+                        class="btn-no bg-rose-100/90 hover:bg-rose-200/90 text-rose-700 font-medium text-base sm:text-lg px-7 py-3.5 rounded-full border border-rose-200 cursor-pointer z-20">
+                    No
+                </button>
+            </div>
+
+            <!-- Playful Hint Text that updates when she tries to click No -->
+            <p id="playful-hint" class="mt-5 text-xs sm:text-sm text-rose-500/90 italic h-5 transition-opacity duration-300"></p>
+        </div>
+
+        <!-- VIEW 2: CELEBRATION & ACCEPTANCE VIEW (Hidden initially) -->
+        <div id="accepted-view" class="hidden animate-reveal py-4">
+            <!-- Celebration Rings / Double Heart Icon -->
+            <div class="mx-auto mb-5 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-100 to-amber-50 flex items-center justify-center shadow-md border border-rose-200">
+                <span class="text-4xl sm:text-5xl animate-heartbeat" role="img" aria-label="Ring and Heart">💍</span>
+            </div>
+
+            <p class="font-script text-4xl sm:text-5xl text-rose-600 mb-3">
+                She Said Yes!
+            </p>
+
+            <h2 class="font-serif-elegant text-2xl sm:text-3xl font-bold text-rose-950 mb-4">
+                Forever Starts Today
+            </h2>
+
+            <div class="flex items-center justify-center gap-3 my-4">
+                <span class="h-px w-14 bg-gradient-to-r from-transparent to-amber-400/70"></span>
+                <span class="text-rose-500 text-sm">♥</span>
+                <span class="h-px w-14 bg-gradient-to-l from-transparent to-amber-400/70"></span>
+            </div>
+
+            <p id="display-acceptance-note" class="text-rose-900/90 text-base sm:text-lg leading-relaxed mb-6 px-2 sm:px-6">
+                You just made me the happiest person in the entire world, <span id="accepted-her-name" class="font-semibold text-rose-700">Sophia</span>. I promise to love you, cherish you, and stand by your side through every season of life.
+            </p>
+
+            <p class="font-script text-3xl text-rose-700 mt-4">
+                Forever yours, <span id="display-your-name">Daniel</span>
+            </p>
+
+            <!-- Replay Celebration Confetti Button -->
+            <div class="mt-8 flex items-center justify-center gap-3">
+                <button id="celebrate-again-btn" 
+                        class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-sm font-medium px-5 py-2.5 rounded-full transition-colors cursor-pointer">
+                    ✨ Celebrate Again
+                </button>
+                <button id="reset-proposal-btn" 
+                        class="text-rose-500 hover:text-rose-700 text-xs underline underline-offset-4 px-3 py-2 cursor-pointer">
+                    Replay Question
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- CUSTOMIZATION MODAL -->
+    <div id="customize-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-rose-950/40 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-rose-100 animate-reveal">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-serif-elegant text-xl font-bold text-rose-950">Personalize Your Proposal</h3>
+                <button id="close-modal-btn" class="text-rose-400 hover:text-rose-700 p-1 rounded-full">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="customize-form" class="space-y-4 text-left">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-rose-800 mb-1">Her Name</label>
+                        <input type="text" id="input-her-name" value="Sophia" required
+                               class="w-full px-3.5 py-2 rounded-xl border border-rose-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-rose-800 mb-1">Your Name</label>
+                        <input type="text" id="input-your-name" value="Daniel" required
+                               class="w-full px-3.5 py-2 rounded-xl border border-rose-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-rose-800 mb-1">The Big Question</label>
+                    <select id="input-question" class="w-full px-3.5 py-2 rounded-xl border border-rose-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        <option value="Will you marry me?">Will you marry me?</option>
+                        <option value="Will you be mine forever?">Will you be mine forever?</option>
+                        <option value="Will you be my girlfriend?">Will you be my girlfriend?</option>
+                        <option value="Will you go on a lifetime adventure with me?">Will you go on a lifetime adventure with me?</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-rose-800 mb-1">Your Love Note</label>
+                    <textarea id="input-message" rows="3" required
+                              class="w-full px-3.5 py-2 rounded-xl border border-rose-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">From the moment you walked into my life, every ordinary day turned into my favorite memory. You are my best friend, my safe place, and my greatest adventure. I want to spend all my tomorrows making you smile.</textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between gap-3">
+                    <button type="button" id="copy-link-btn" 
+                            class="text-xs font-medium text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-3.5 py-2.5 rounded-xl transition-colors">
+                        🔗 Copy Shareable Link
+                    </button>
+                    <button type="submit" 
+                            class="btn-yes text-white text-sm font-semibold px-6 py-2.5 rounded-xl cursor-pointer">
+                        Save & Preview
+                    </button>
+                </div>
+                <p id="copy-feedback" class="text-xs text-emerald-600 text-center hidden">Link copied! Send it to her when ready ♥</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =========================================================================
+         * 1. EASY CONFIGURATION (Edit these defaults directly in code if desired)
+         * =========================================================================
+         */
+        const DEFAULT_CONFIG = {
+            herName: "Puspa",
+            yourName: "Avinab",
+            question: "Will you marry me?",
+            message: "From the moment you walked into my life, every ordinary day turned into my favorite memory. You are my best friend, my safe place, and my greatest adventure. I want to spend all my tomorrows making you smile."
+        };
+
+        // Playful messages shown when the "No" button dodges
+        const DODGE_PHRASES = [
+            "Oops, that button seems a little shy! 😉",
+            "Nice try, but my heart says click Yes! 💕",
+            "Are you sure? Look how shiny the Yes button is! ✨",
+            "Error 404: 'No' not found in our love story! 🌹",
+            "You can't catch me! Just say Yes already! 🥰",
+            "Resistance is futile when it's true love! 💖"
+        ];
+
+        /**
+         * =========================================================================
+         * 2. DOM ELEMENTS & STATE
+         * =========================================================================
+         */
+        const heartsBg = document.getElementById('hearts-bg');
+        const questionView = document.getElementById('question-view');
+        const acceptedView = document.getElementById('accepted-view');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const playfulHint = document.getElementById('playful-hint');
+
+        // Customization elements
+        const customizeModal = document.getElementById('customize-modal');
+        const openCustomizeBtn = document.getElementById('open-customize-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const customizeForm = document.getElementById('customize-form');
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        let dodgeCount = 0;
+        let yesScale = 1;
+
+        /**
+         * =========================================================================
+         * 3. FLOATING BACKGROUND HEARTS GENERATOR
+         * =========================================================================
+         */
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            
+            // Randomize appearance
+            const heartSymbols = ['♥', '❤', '💕', '💗', '🌸'];
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            
+            const size = Math.random() * 18 + 12; // 12px to 30px
+            const leftPos = Math.random() * 100; // 0vw to 100vw
+            const duration = Math.random() * 7 + 7; // 7s to 14s
+            const colors = ['#FDA4AF', '#FB7185', '#F43F5E', '#FBCFE8', '#F9A8D4'];
+            
+            heart.style.left = `${leftPos}vw`;
+            heart.style.fontSize = `${size}px`;
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.animationDuration = `${duration}s`;
+
+            heartsBg.appendChild(heart);
+
+            // Clean up DOM after animation ends
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // Spawn hearts periodically
+        setInterval(createFloatingHeart, 550);
+        // Spawn an initial batch immediately
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createFloatingHeart, i * 200);
+        }
+
+        /**
+         * =========================================================================
+         * 4. PLAYFUL DODGING "NO" BUTTON LOGIC (Desktop & Mobile)
+         * =========================================================================
+         */
+        function moveNoButton(e) {
+            if (e) e.preventDefault();
+
+            // Switch button to fixed positioning on first dodge so it can move freely anywhere on screen
+            if (noBtn.style.position !== 'fixed') {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${rect.left}px`;
+                noBtn.style.top = `${rect.top}px`;
+            }
+
+            // Calculate safe viewport boundaries with generous padding
+            const padding = 24;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            // Get Yes button bounds so No button never overlaps Yes button
+            const yesRect = yesBtn.getBoundingClientRect();
+
+            let newX, newY;
+            let attempts = 0;
+            do {
+                newX = Math.max(padding, Math.floor(Math.random() * maxX));
+                newY = Math.max(padding, Math.floor(Math.random() * maxY));
+                attempts++;
+            } while (
+                attempts < 15 &&
+                newX < yesRect.right + 20 &&
+                newX + btnWidth > yesRect.left - 20 &&
+                newY < yesRect.bottom + 20 &&
+                newY + btnHeight > yesRect.top - 20
+            );
+
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+
+            // Update playful hint text
+            playfulHint.textContent = DODGE_PHRASES[dodgeCount % DODGE_PHRASES.length];
+            dodgeCount++;
+
+            // Gently grow the "Yes" button slightly each time she tries to click "No"
+            if (yesScale < 1.35) {
+                yesScale += 0.05;
+                yesBtn.style.transform = `scale(${yesScale})`;
+            }
+        }
+
+        // Trigger dodge on mouse hover (desktop) and touchstart/click (mobile)
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton, { passive: false });
+        noBtn.addEventListener('click', moveNoButton);
+
+        /**
+         * =========================================================================
+         * 5. CELEBRATORY EXPLOSION & ACCEPTANCE REVEAL
+         * =========================================================================
+         */
+        function triggerCelebration() {
+            const colors = ['#F43F5E', '#FB7185', '#FDA4AF', '#FBBF24', '#FFF1F2'];
+
+            // Center burst
+            confetti({
+                particleCount: 90,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: colors
+            });
+
+            // Continuous side cannons for 2.5 seconds
+            const end = Date.now() + 2500;
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.65 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.65 },
+                    colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Also burst extra floating hearts
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createFloatingHeart, i * 80);
+            }
+        }
+
+        yesBtn.addEventListener('click', () => {
+            // Hide dodging No button if it was moved outside the card
+            noBtn.style.display = 'none';
+            openCustomizeBtn.style.display = 'none';
+
+            // Transition views
+            questionView.classList.add('hidden');
+            acceptedView.classList.remove('hidden');
+
+            // Launch celebration
+            triggerCelebration();
+        });
+
+        document.getElementById('celebrate-again-btn').addEventListener('click', triggerCelebration);
+
+        document.getElementById('reset-proposal-btn').addEventListener('click', () => {
+            acceptedView.classList.add('hidden');
+            questionView.classList.remove('hidden');
+            openCustomizeBtn.style.display = 'flex';
+            
+            // Reset No button back into normal document flow
+            noBtn.style.display = 'inline-block';
+            noBtn.style.position = 'static';
+            dodgeCount = 0;
+            yesScale = 1;
+            yesBtn.style.transform = 'scale(1)';
+            playfulHint.textContent = '';
+        });
+
+        /**
+         * =========================================================================
+         * 6. CUSTOMIZATION & URL SHARING SYSTEM
+         * =========================================================================
+         */
+        function applyConfig(config) {
+            document.getElementById('display-her-name').textContent = config.herName;
+            document.getElementById('accepted-her-name').textContent = config.herName;
+            document.getElementById('display-your-name').textContent = config.yourName;
+            document.getElementById('display-question').textContent = config.question;
+            document.getElementById('display-message').textContent = config.message;
+
+            // Sync form inputs
+            document.getElementById('input-her-name').value = config.herName;
+            document.getElementById('input-your-name').value = config.yourName;
+            document.getElementById('input-question').value = config.question;
+            document.getElementById('input-message').value = config.message;
+        }
+
+        // Load from URL parameters if shared via link, otherwise use defaults
+        function loadInitialConfig() {
+            const params = new URLSearchParams(window.location.search);
+            const config = {
+                herName: params.get('her') || DEFAULT_CONFIG.herName,
+                yourName: params.get('you') || DEFAULT_CONFIG.yourName,
+                question: params.get('q') || DEFAULT_CONFIG.question,
+                message: params.get('msg') || DEFAULT_CONFIG.message
+            };
+            applyConfig(config);
+        }
+
+        openCustomizeBtn.addEventListener('click', () => {
+            customizeModal.classList.remove('hidden');
+            customizeModal.classList.add('flex');
+            copyFeedback.classList.add('hidden');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            customizeModal.classList.add('hidden');
+            customizeModal.classList.remove('flex');
+        });
+
+        customizeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const updatedConfig = {
+                herName: document.getElementById('input-her-name').value.trim() || DEFAULT_CONFIG.herName,
+                yourName: document.getElementById('input-your-name').value.trim() || DEFAULT_CONFIG.yourName,
+                question: document.getElementById('input-question').value,
+                message: document.getElementById('input-message').value.trim() || DEFAULT_CONFIG.message
+            };
+            applyConfig(updatedConfig);
+            customizeModal.classList.add('hidden');
+            customizeModal.classList.remove('flex');
+        });
+
+        // Copy shareable link with URL parameters
+        copyLinkBtn.addEventListener('click', () => {
+            const url = new URL(window.location.href.split('?')[0]);
+            url.searchParams.set('her', document.getElementById('input-her-name').value.trim());
+            url.searchParams.set('you', document.getElementById('input-your-name').value.trim());
+            url.searchParams.set('q', document.getElementById('input-question').value);
+            url.searchParams.set('msg', document.getElementById('input-message').value.trim());
+
+            const tempInput = document.createElement('input');
+            tempInput.value = url.toString();
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            copyFeedback.classList.remove('hidden');
+        });
+
+        // Initialize on page load
+        loadInitialConfig();
+    </script>
+</body>
+</html>
