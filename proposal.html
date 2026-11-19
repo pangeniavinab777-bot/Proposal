@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>A Special Question For You ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient-1: #fff5f7;
+      --bg-gradient-2: #ffe4ec;
+      --bg-gradient-3: #ffd6e2;
+      --primary: #e11d48;
+      --primary-hover: #be123c;
+      --primary-soft: rgba(225, 29, 72, 0.12);
+      --text-main: #2d161e;
+      --text-muted: #6e4552;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --border-soft: rgba(225, 29, 72, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100dvh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-gradient-3) 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Floating Background Hearts */
+    .bg-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -40px;
+      color: rgba(225, 29, 72, 0.18);
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      85% {
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Customize Button */
+    .customize-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-soft);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.08);
+      transition: all 0.2s ease;
+    }
+
+    .customize-btn:hover {
+      background: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Main Card */
+    .card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 32px;
+      padding: 36px 26px;
+      text-align: center;
+      box-shadow:
+        0 20px 50px rgba(190, 18, 60, 0.12),
+        0 4px 16px rgba(190, 18, 60, 0.05);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .heart-emblem {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      background: linear-gradient(135deg, #ff4d79, #e11d48);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 34px;
+      box-shadow: 0 12px 24px rgba(225, 29, 72, 0.28);
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.09); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.09); }
+      70% { transform: scale(1); }
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+
+    h1 span {
+      color: var(--primary);
+      font-style: italic;
+    }
+
+    .love-note {
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .question-box {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 18px 16px;
+      margin-bottom: 26px;
+    }
+
+    .question-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.25;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      min-height: 56px;
+      position: relative;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 30px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(225, 29, 72, 0.32);
+      z-index: 2;
+    }
+
+    .btn-yes:hover {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      transform: scale(1.06);
+    }
+
+    .btn-no {
+      background: #fff;
+      color: var(--text-muted);
+      border: 1px solid rgba(110, 69, 82, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      position: relative;
+      z-index: 15;
+    }
+
+    .dodge-hint {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--primary);
+      font-weight: 600;
+      min-height: 20px;
+      opacity: 0.9;
+    }
+
+    .signature {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-soft);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .signature strong {
+      color: var(--text-main);
+    }
+
+    /* Success State */
+    .success-view {
+      display: none;
+      animation: popIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .success-view.active {
+      display: block;
+    }
+
+    .proposal-view.hidden {
+      display: none;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.35rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .success-message {
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: var(--text-main);
+      margin-bottom: 22px;
+    }
+
+    .date-pill {
+      display: inline-block;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 999px;
+    }
+
+    /* Customize Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 22, 30, 0.45);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 26px;
+      padding: 26px 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+      text-align: left;
+    }
+
+    .modal h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .modal p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .field input, .field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #e5ced5;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .field input:focus, .field textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 11px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-save {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-close {
+      background: #f5ebee;
+      color: var(--text-main);
+    }
+
+    canvas#confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-hearts" id="bgHearts"></div>
+  <canvas id="confettiCanvas"></canvas>
+
+  <button class="customize-btn" id="openCustomizeBtn" aria-label="Personalize message">
+    ✏️ Personalize
+  </button>
+
+  <main class="card">
+    <!-- Proposal View -->
+    <div class="proposal-view" id="proposalView">
+      <div class="badge">✨ Just For You ✨</div>
+      <div class="heart-emblem">❤️</div>
+
+      <h1>Hey <span id="herNameDisplay">Beautiful</span>,</h1>
+      <p class="love-note" id="loveNoteDisplay">
+        From the very first moment we started talking, every ordinary day turned into my favorite memory. Your smile lights up my whole world, and I cannot imagine my future without you in it.
+      </p>
+
+      <div class="question-box">
+        <div class="question-text" id="questionDisplay">Will you be mine forever?</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-yes" id="yesBtn">Yes, I will! 💖</button>
+        <button class="btn btn-no" id="noBtn">No</button>
+      </div>
+
+      <div class="dodge-hint" id="dodgeHint"></div>
+
+      <div class="signature">
+        Forever yours, <strong id="yourNameDisplay">Me</strong>
+      </div>
+    </div>
+
+    <!-- Success View -->
+    <div class="success-view" id="successView">
+      <div class="heart-emblem">💍</div>
+      <h2 class="success-title">She Said YES! 🎉</h2>
+      <p class="success-message" id="successNoteDisplay">
+        You just made me the happiest person alive! I promise to cherish you, make you laugh every single day, and love you endlessly.
+      </p>
+      <div class="date-pill">🥂 Here is to our forever ❤️</div>
+    </div>
+  </main>
+
+  <!-- Personalize Modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h2>Personalize Your Proposal</h2>
+      <p>Edit the details below and save to update the page.</p>
+
+      <div class="field">
+        <label for="herNameInput">Her Name</label>
+        <input type="text" id="herNameInput" placeholder="e.g., Priya" />
+      </div>
+
+      <div class="field">
+        <label for="yourNameInput">Your Name</label>
+        <input type="text" id="yourNameInput" placeholder="e.g., Aarav" />
+      </div>
+
+      <div class="field">
+        <label for="questionInput">Proposal Question</label>
+        <input type="text" id="questionInput" placeholder="Will you be mine forever?" />
+      </div>
+
+      <div class="field">
+        <label for="loveNoteInput">Your Love Note</label>
+        <textarea id="loveNoteInput" rows="3"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-close" id="closeModalBtn">Cancel</button>
+        <button class="btn-save" id="saveModalBtn">Apply Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_CONFIG = {
+      herName: "Beautiful",
+      yourName: "Me",
+      question: "Will you be mine forever?",
+      loveNote: "From the very first moment we started talking, every ordinary day turned into my favorite memory. Your smile lights up my whole world, and I cannot imagine my future without you in it."
+    };
+
+    const DODGE_MESSAGES = [
+      "Nice try! 😉",
+      "Are you sure? Look at the Yes button! 💖",
+      "That button is a little shy today ✨",
+      "Oops, missed it! Try the pink one 🥰",
+      "My heart says you meant Yes! ❤️"
+    ];
+
+    let dodgeCount = 0;
+
+    // Parse URL parameters so personalized links work automatically on mobile
+    const params = new URLSearchParams(window.location.search);
+    const config = {
+      herName: params.get("to") || DEFAULT_CONFIG.herName,
+      yourName: params.get("from") || DEFAULT_CONFIG.yourName,
+      question: params.get("q") || DEFAULT_CONFIG.question,
+      loveNote: params.get("note") || DEFAULT_CONFIG.loveNote
+    };
+
+    const herNameDisplay = document.getElementById("herNameDisplay");
+    const yourNameDisplay = document.getElementById("yourNameDisplay");
+    const questionDisplay = document.getElementById("questionDisplay");
+    const loveNoteDisplay = document.getElementById("loveNoteDisplay");
+    const dodgeHint = document.getElementById("dodgeHint");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    function renderConfig() {
+      herNameDisplay.textContent = config.herName;
+      yourNameDisplay.textContent = config.yourName;
+      questionDisplay.textContent = config.question;
+      loveNoteDisplay.textContent = config.loveNote;
+    }
+
+    renderConfig();
+
+    // Floating background hearts
+    const bgHearts = document.getElementById("bgHearts");
+    const heartSymbols = ["❤️", "💖", "💕", "💗", "✨"];
+    for (let i = 0; i < 18; i++) {
+      const span = document.createElement("span");
+      span.className = "floating-heart";
+      span.textContent = heartSymbols[i % heartSymbols.length];
+      span.style.left = Math.random() * 100 + "vw";
+      span.style.fontSize = (14 + Math.random() * 18) + "px";
+      span.style.animationDuration = (7 + Math.random() * 8) + "s";
+      span.style.animationDelay = (-Math.random() * 10) + "s";
+      bgHearts.appendChild(span);
+    }
+
+    // Mobile-friendly dodging No button (works on touchstart & mouseover)
+    function dodgeNoButton(e) {
+      if (e) e.preventDefault();
+      dodgeCount++;
+      dodgeHint.textContent = DODGE_MESSAGES[(dodgeCount - 1) % DODGE_MESSAGES.length];
+
+      // Grow Yes button slightly each time
+      const scale = Math.min(1 + dodgeCount * 0.08, 1.45);
+      yesBtn.style.transform = `scale(${scale})`;
+
+      // Move No button within safe mobile viewport bounds
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = window.innerWidth - btnRect.width - 24;
+      const maxY = window.innerHeight - btnRect.height - 24;
+
+      const randomX = Math.max(16, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(16, Math.floor(Math.random() * maxY));
+
+      noBtn.style.position = "fixed";
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+    }
+
+    noBtn.addEventListener("mouseenter", dodgeNoButton);
+    noBtn.addEventListener("touchstart", dodgeNoButton, { passive: false });
+    noBtn.addEventListener("click", dodgeNoButton);
+
+    // Yes celebration
+    yesBtn.addEventListener("click", () => {
+      noBtn.style.display = "none";
+      document.getElementById("proposalView").classList.add("hidden");
+      document.getElementById("successView").classList.add("active");
+      launchConfetti();
+    });
+
+    // Personalize Modal
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    document.getElementById("openCustomizeBtn").addEventListener("click", () => {
+      document.getElementById("herNameInput").value = config.herName;
+      document.getElementById("yourNameInput").value = config.yourName;
+      document.getElementById("questionInput").value = config.question;
+      document.getElementById("loveNoteInput").value = config.loveNote;
+      modalBackdrop.classList.add("open");
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      modalBackdrop.classList.remove("open");
+    });
+
+    document.getElementById("saveModalBtn").addEventListener("click", () => {
+      config.herName = document.getElementById("herNameInput").value.trim() || DEFAULT_CONFIG.herName;
+      config.yourName = document.getElementById("yourNameInput").value.trim() || DEFAULT_CONFIG.yourName;
+      config.question = document.getElementById("questionInput").value.trim() || DEFAULT_CONFIG.question;
+      config.loveNote = document.getElementById("loveNoteInput").value.trim() || DEFAULT_CONFIG.loveNote;
+      renderConfig();
+      modalBackdrop.classList.remove("open");
+    });
+
+    // Confetti & Hearts Celebration Canvas
+    function launchConfetti() {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ["#e11d48", "#fb7185", "#fda4af", "#f43f5e", "#f59e0b", "#ffffff"];
+
+      for (let i = 0; i < 130; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.7) * 15,
+          size: 6 + Math.random() * 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // gravity
+          p.rotation += p.vRot;
+
+          if (p.y < canvas.height + 20) active = true;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          ctx.restore();
+        });
+
+        if (active) requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+  </script>
+</body>
+</html>
